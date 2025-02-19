@@ -122,13 +122,13 @@ dependencies {
     testImplementation ("org.hamcrest:hamcrest-all:1.3")
     testImplementation ("androidx.arch.core:core-testing:2.2.0")
     testImplementation( "org.robolectric:robolectric:4.3.1")
-    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.0")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
     testImplementation ("com.google.truth:truth:1.4.4")
     testImplementation ("org.mockito:mockito-core:2.25.0")
 
     // Instrumented Unit Tests
     androidTestImplementation ("junit:junit:4.13.2")
-    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.10.0")
+    androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
     androidTestImplementation ("androidx.arch.core:core-testing:2.2.0")
     androidTestImplementation ("com.google.truth:truth:1.4.4")
     androidTestImplementation ("androidx.test.ext:junit:1.2.1")

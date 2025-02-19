@@ -11,9 +11,6 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface Dao {
 
-    @Query("select * from shopping_items ORDER BY uid Desc")
-    fun getAll() : Flow<List<ShoppingItem>>
-
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(shoppingItem: ShoppingItem)
 
@@ -22,4 +19,8 @@ interface Dao {
 
     @Query("select SUM(price_per_item * amount) from shopping_items")
     fun getTotalPrice() : Flow<Int>
+
+    @Query("select * from shopping_items ORDER BY uid Desc")
+    fun getAll() : Flow<List<ShoppingItem>>
+
 }
