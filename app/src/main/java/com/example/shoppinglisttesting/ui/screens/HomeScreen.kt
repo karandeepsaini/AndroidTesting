@@ -36,6 +36,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -43,15 +44,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.shoppinglisttesting.R
 import com.example.shoppinglisttesting.data.ShoppingItem
 import com.example.shoppinglisttesting.db.Dao
+import com.example.shoppinglisttesting.db.DatabaseModule
 import com.example.shoppinglisttesting.network.NetworkModule
 import com.example.shoppinglisttesting.ui.NavigationItem
-import com.example.shoppinglisttesting.ui.repo.ShoppingRepository
+import com.example.shoppinglisttesting.repo.ShoppingRepository
 import com.example.shoppinglisttesting.ui.viewmodels.MainViewmodel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -89,10 +93,10 @@ fun HomeScreen(
     modifier: Modifier = Modifier,
     viewmodel: MainViewmodel
 ) {
-    val shoppingItems by viewmodel.shoppingItemList.collectAsState()
+    val shoppingItems by viewmodel.shoppingItemList.collectAsStateWithLifecycle()
 
     // Calculate total cost dynamically
-    val totalCost by viewmodel.totalSum.collectAsState()
+    val totalCost by viewmodel.totalSum.collectAsStateWithLifecycle()
 
     Column(
         modifier = Modifier
@@ -101,7 +105,6 @@ fun HomeScreen(
     ) {
         LazyColumn {
             items(shoppingItems, { shoppingItems: ShoppingItem -> shoppingItems.uid }) { item ->
-
 
 
                 val dismissState = rememberDismissState()
@@ -132,7 +135,7 @@ fun HomeScreen(
 
                         }
                     },
-                    dismissContent ={
+                    dismissContent = {
                         ShoppingItemRow(item)
                     }
                 )
@@ -204,10 +207,12 @@ fun HomeScreenPreview() {
 
     }
 
-    val shoppingRepository = object :
-        ShoppingRepository(NetworkModule.provideApiService(NetworkModule.provideRetrofit())) {}
+    val shoppingRepository = ShoppingRepository(
+        DatabaseModule.provideShoppingDao(DatabaseModule.provideDatabase(LocalContext.current)),
+        NetworkModule.provideApiService(NetworkModule.provideRetrofit())
+    )
 
-    val fakeViewModel = MainViewmodel(fakeDao, shoppingRepository)
+    val fakeViewModel = MainViewmodel(shoppingRepository)
 
     Scaffold {
         HomeScreen(navController = null, viewmodel = fakeViewModel, modifier = Modifier.padding(it))

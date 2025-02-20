@@ -37,7 +37,7 @@ fun ImageSelectionScreen(
     navController: NavHostController,
     mainViewmodel: MainViewmodel
 ) {
-    val value by mainViewmodel.searchItem.collectAsStateWithLifecycle();
+    val value by mainViewmodel.searchQuery.collectAsStateWithLifecycle();
     val images by mainViewmodel.imageList.collectAsStateWithLifecycle()
     Timber.d("IMAGESS : %s",Gson().toJson(images))
     Column(
