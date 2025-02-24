@@ -2,7 +2,6 @@ package com.example.shoppinglisttesting.ui.screens
 
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,7 +16,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material3.DismissDirection
 import androidx.compose.material3.DismissValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -28,12 +26,10 @@ import androidx.compose.material3.SwipeToDismiss
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberDismissState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
@@ -47,15 +43,13 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
-import com.example.shoppinglisttesting.R
 import com.example.shoppinglisttesting.data.ShoppingItem
 import com.example.shoppinglisttesting.db.Dao
 import com.example.shoppinglisttesting.db.DatabaseModule
 import com.example.shoppinglisttesting.network.NetworkModule
 import com.example.shoppinglisttesting.ui.NavigationItem
-import com.example.shoppinglisttesting.repo.ShoppingRepository
+import com.example.shoppinglisttesting.repo.ShoppingRepositoryImpl
 import com.example.shoppinglisttesting.ui.viewmodels.MainViewmodel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -207,14 +201,14 @@ fun HomeScreenPreview() {
 
     }
 
-    val shoppingRepository = ShoppingRepository(
+    val shoppingRepository = ShoppingRepositoryImpl(
         DatabaseModule.provideShoppingDao(DatabaseModule.provideDatabase(LocalContext.current)),
         NetworkModule.provideApiService(NetworkModule.provideRetrofit())
     )
 
-    val fakeViewModel = MainViewmodel(shoppingRepository)
-
-    Scaffold {
-        HomeScreen(navController = null, viewmodel = fakeViewModel, modifier = Modifier.padding(it))
-    }
+//    val fakeViewModel = MainViewmodel(shoppingRepository)
+//
+//    Scaffold {
+//        HomeScreen(navController = null, viewmodel = fakeViewModel, modifier = Modifier.padding(it))
+//    }
 }

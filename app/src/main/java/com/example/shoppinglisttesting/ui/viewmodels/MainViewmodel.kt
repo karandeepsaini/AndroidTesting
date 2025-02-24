@@ -1,19 +1,18 @@
 package com.example.shoppinglisttesting.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.shoppinglisttesting.repo.ShoppingRepository
-import com.example.shoppinglisttesting.db.Dao
+import com.example.shoppinglisttesting.repo.ShoppingRepositoryImpl
 import com.example.shoppinglisttesting.data.ImageItem
 import com.example.shoppinglisttesting.data.ShoppingItem
 import com.example.shoppinglisttesting.other.Status
+import com.example.shoppinglisttesting.repo.ShoppingRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,10 +22,8 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import timber.log.Timber
@@ -35,6 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewmodel @Inject constructor(
     private val repo: ShoppingRepository,
+    private val dispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val _shoppingItem = MutableStateFlow(
@@ -48,12 +46,12 @@ class MainViewmodel @Inject constructor(
     )
     val shoppingItem: StateFlow<ShoppingItem> = _shoppingItem.asStateFlow()
 
-    private val _shoppingItemList = repo.observeShoppingItem().stateIn(
+    val shoppingItemList : StateFlow<List<ShoppingItem>> = repo.observeShoppingItem().stateIn(
         viewModelScope,
         SharingStarted.Lazily,
         emptyList()
     )
-    val shoppingItemList: StateFlow<List<ShoppingItem>> = _shoppingItemList
+
 
     private val _totalSum = repo.getTotalSum().stateIn(
         viewModelScope,
@@ -68,12 +66,12 @@ class MainViewmodel @Inject constructor(
     private val _searchQuery = MutableStateFlow("")
     val searchQuery: StateFlow<String> = _searchQuery
 
-    private var searchJob : Job? = null
+    private var searchJob: Job? = null
 
     fun searchItem(search: String) {
         _searchQuery.value = search
 
-        if(searchJob == null || searchJob?.isActive == false){
+        if (searchJob == null || searchJob?.isActive == false) {
             observerSearchQuery()
         }
     }
@@ -94,15 +92,17 @@ class MainViewmodel @Inject constructor(
                         }
                 }
                 .collectLatest { resource ->
-                    when(resource.status){
+                    when (resource.status) {
                         Status.LOADING -> {
                             Timber.d("Loading images...")
                             _imageList.value = emptyList()
                         }
+
                         Status.SUCCESS -> {
                             _imageList.value = resource.data?.hits ?: emptyList()
                             Timber.d("Images loaded successfully!")
                         }
+
                         Status.ERROR -> {
                             Timber.e("Error loading images: ${resource.message}")
                         }
@@ -116,17 +116,40 @@ class MainViewmodel @Inject constructor(
         _shoppingItem.value = item
     }
 
-    fun AddItem() {
+    fun AddItem(shoppingItem: ShoppingItem) {
+        if (shoppingItem.image.isBlank()) {
+            return
+        }
+
+        if (shoppingItem.name.isBlank()) {
+            return
+        }
+
+        if (shoppingItem.amount <= 0) {
+            return
+        }
+
+        if (shoppingItem.pricePerItem <= 0) {
+            return
+        }
+
+        if(shoppingItem.name.length > 20){
+            return
+        }
+
+        if(shoppingItem.pricePerItem > 10000){
+            return
+        }
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
-                repo.insertShoppingItem(_shoppingItem.value)
+            withContext(dispatcher) {
+                repo.insertShoppingItem(shoppingItem)
             }
         }
     }
 
     fun DeleteItem(shoppingItem: ShoppingItem) {
         viewModelScope.launch {
-            withContext(Dispatchers.IO) {
+            withContext(dispatcher) {
                 repo.deleteShoppingItem(shoppingItem)
             }
         }
@@ -141,7 +164,6 @@ class MainViewmodel @Inject constructor(
         super.onCleared()
         searchJob?.cancel()
     }
-
 
 
 }

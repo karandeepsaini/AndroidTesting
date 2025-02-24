@@ -2,22 +2,7 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="DaoTest">
-        <State />
-      </entry>
       <entry key="app">
-        <State />
-      </entry>
-      <entry key="deleteTest()">
-        <State />
-      </entry>
-      <entry key="getAllTest()">
-        <State />
-      </entry>
-      <entry key="getTotalPrice()">
-        <State />
-      </entry>
-      <entry key="insertTest()">
         <State />
       </entry>
     </value>

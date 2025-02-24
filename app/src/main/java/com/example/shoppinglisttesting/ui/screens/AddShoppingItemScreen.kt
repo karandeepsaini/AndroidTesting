@@ -137,7 +137,7 @@ fun AddShoppingItemScreen(
             Button(
                 onClick = {
                     Timber.d("CLickedddddd .....")
-                    viewmodel.AddItem()
+                    viewmodel.AddItem(shoppingItem)
 
                     navController.popBackStack()
 

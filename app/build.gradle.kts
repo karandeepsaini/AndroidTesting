@@ -46,6 +46,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"
     }
+    testOptions{
+        unitTests.isReturnDefaultValues = false
+    }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -83,6 +86,8 @@ dependencies {
 
     // Room
     implementation ("androidx.room:room-runtime:2.6.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
+    testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     kapt( "androidx.room:room-compiler:2.6.1")
 
     // Kotlin Extensions and Coroutines support for Room
@@ -125,8 +130,12 @@ dependencies {
     testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
     testImplementation ("com.google.truth:truth:1.4.4")
     testImplementation ("org.mockito:mockito-core:2.25.0")
+    testImplementation ("org.mockito.kotlin:mockito-kotlin:4.0.0")
+    testImplementation("app.cash.turbine:turbine:1.2.0")
 
-    // Instrumented Unit Tests
+
+
+// Instrumented Unit Tests
     androidTestImplementation ("junit:junit:4.13.2")
     androidTestImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.9.0")
     androidTestImplementation ("androidx.arch.core:core-testing:2.2.0")
