@@ -34,6 +34,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -97,6 +99,7 @@ fun HomeScreen(
         modifier = Modifier
             .fillMaxSize()
             .padding(16.dp)
+            .semantics { contentDescription = "Home Screen" }
     ) {
         LazyColumn {
             items(shoppingItems, { shoppingItems: ShoppingItem -> shoppingItems.uid }) { item ->
@@ -167,7 +170,7 @@ fun HomeScreen(
                     onClickAdd(NavigationItem.Details.route)
                 }
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                Icon(imageVector = Icons.Default.Add, contentDescription = "AddItem")
             }
         }
     }

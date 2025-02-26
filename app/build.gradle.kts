@@ -86,6 +86,8 @@ dependencies {
 
     // Room
     implementation ("androidx.room:room-runtime:2.6.1")
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.1")
     kapt( "androidx.room:room-compiler:2.6.1")
@@ -111,8 +113,9 @@ dependencies {
     implementation ("androidx.activity:activity-ktx:1.10.0")
 
     //Dagger - Hilt
-    implementation("com.google.dagger:hilt-android:2.48.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.48.1")
+    val dagger = "2.48.1"
+    implementation("com.google.dagger:hilt-android:$dagger")
+    kapt("com.google.dagger:hilt-android-compiler:$dagger")
     implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
 
 
@@ -157,14 +160,14 @@ dependencies {
 
 
     // For Robolectric tests.
-    testImplementation("com.google.dagger:hilt-android-testing:2.48.1")
+    testImplementation("com.google.dagger:hilt-android-testing:$dagger")
     // ...with Kotlin.
-    kaptTest("com.google.dagger:hilt-android-compiler:2.48.1")
+    kaptTest("com.google.dagger:hilt-android-compiler:$dagger")
 
     // For instrumented tests.
-    androidTestImplementation("com.google.dagger:hilt-android-testing:2.48.1")
+    androidTestImplementation("com.google.dagger:hilt-android-testing:$dagger")
     // ...with Kotlin.
-    kaptAndroidTest("com.google.dagger:hilt-android-compiler:2.48.1")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:$dagger")
 
 
 

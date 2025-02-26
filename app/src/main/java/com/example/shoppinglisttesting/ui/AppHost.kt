@@ -18,9 +18,8 @@ import com.example.shoppinglisttesting.ui.screens.ImageSelectionScreen
 fun AppNavHost(
     navController: NavHostController,
     modifier: Modifier = Modifier,
-
+    mainViewmodel: MainViewmodel = hiltViewModel()
     ) {
-    val mainViewmodel: MainViewmodel = hiltViewModel()
 
     NavHost(
         navController,

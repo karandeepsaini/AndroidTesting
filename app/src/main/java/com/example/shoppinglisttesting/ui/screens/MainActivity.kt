@@ -13,9 +13,11 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.rememberNavController
 import com.example.shoppinglisttesting.ui.AppNavHost
 import com.example.shoppinglisttesting.ui.theme.ShoppingListTestingTheme
+import com.example.shoppinglisttesting.ui.viewmodels.MainViewmodel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,12 +42,13 @@ class MainActivity : ComponentActivity() {
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(modifier: Modifier = Modifier) {
-    val navController = rememberNavController();
+    val navController = rememberNavController()
+    val viewmodel : MainViewmodel =  hiltViewModel()
     Scaffold() {
         Column(modifier = Modifier
             .fillMaxSize()
             .padding(top = 30.dp, start = 9.dp, end = 9.dp, bottom = 9.dp)) {
-            AppNavHost(navController = navController)
+            AppNavHost(navController = navController, mainViewmodel = viewmodel)
         }
 
     }

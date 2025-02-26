@@ -20,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -41,7 +43,7 @@ fun ImageSelectionScreen(
     val images by mainViewmodel.imageList.collectAsStateWithLifecycle()
     Timber.d("IMAGESS : %s",Gson().toJson(images))
     Column(
-        modifier = modifier
+        modifier = modifier.semantics { contentDescription = "AddImage Screen" }
     ) {
         Row(horizontalArrangement = Arrangement.Center, modifier = Modifier.fillMaxWidth()) {
             OutlinedTextField(
