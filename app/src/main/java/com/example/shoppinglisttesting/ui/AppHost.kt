@@ -16,23 +16,49 @@ import com.example.shoppinglisttesting.ui.screens.ImageSelectionScreen
 
 @Composable
 fun AppNavHost(
-    modifier: Modifier = Modifier,
     navController: NavHostController,
-) {
+    modifier: Modifier = Modifier,
+
+    ) {
     val mainViewmodel: MainViewmodel = hiltViewModel()
 
-    NavHost(navController, startDestination = NavigationItem.Home.route) {
+    NavHost(
+        navController,
+        startDestination = NavigationItem.Home.route
+    ) {
 
         composable(NavigationItem.Home.route) {
-            HomeScreen(navController = navController, viewmodel = mainViewmodel)
+            HomeScreen(
+                navController = navController,
+                viewmodel = mainViewmodel,
+                onClickAdd = { route ->
+                    navController.navigateSingleTopTo(route)
+                }
+            )
         }
-        navigation(startDestination = NavigationItem.Details.route, route = "shoppingGraph") {
+        navigation(
+            startDestination = NavigationItem.Details.route,
+            route = "shoppingGraph"
+        ) {
             composable(NavigationItem.Details.route) {
-                AddShoppingItemScreen(navController = navController, viewmodel = mainViewmodel)
+                AddShoppingItemScreen(
+                    navController = navController,
+                    viewmodel = mainViewmodel,
+                    onNavigateToAddImage = { route ->
+                        navController.navigateSingleTopTo(route)
+                    }
+                )
             }
             composable(NavigationItem.ImageSelection.route) {
-                ImageSelectionScreen(navController = navController, mainViewmodel = mainViewmodel)
+                ImageSelectionScreen(
+                    navController = navController,
+                    mainViewmodel = mainViewmodel
+                )
             }
         }
     }
 }
+
+fun NavHostController.navigateSingleTopTo(route: String) =
+    this.navigate(route) { launchSingleTop = true }
+

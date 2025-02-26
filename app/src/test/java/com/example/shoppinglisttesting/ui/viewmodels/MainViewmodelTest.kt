@@ -1,6 +1,7 @@
 package com.example.shoppinglisttesting.ui.viewmodels
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import com.example.shoppinglisttesting.MainCoroutineRule
 import com.example.shoppinglisttesting.data.ShoppingItem
 import com.example.shoppinglisttesting.repo.FakeShoppingRepository
 import com.google.common.truth.Truth.assertThat
@@ -29,8 +30,12 @@ class MainViewmodelTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    @get:Rule
+    var mainCoroutineRule = MainCoroutineRule()
+
     private lateinit var viewModel: MainViewmodel
     private lateinit var fakeRepository: FakeShoppingRepository
+
 
 
     val tempSchedule = TestCoroutineScheduler()
@@ -40,7 +45,7 @@ class MainViewmodelTest {
     fun setUp() {
         Dispatchers.setMain(dispatcher)
         fakeRepository = FakeShoppingRepository()
-        viewModel = MainViewmodel(fakeRepository, dispatcher)
+        viewModel = MainViewmodel(fakeRepository,dispatcher)
     }
 
     @Test

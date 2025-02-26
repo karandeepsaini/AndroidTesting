@@ -85,7 +85,8 @@ fun ShoppingItemRow(item: ShoppingItem) {
 fun HomeScreen(
     navController: NavHostController?,
     modifier: Modifier = Modifier,
-    viewmodel: MainViewmodel
+    viewmodel: MainViewmodel,
+    onClickAdd : (String) -> Unit
 ) {
     val shoppingItems by viewmodel.shoppingItemList.collectAsStateWithLifecycle()
 
@@ -162,10 +163,8 @@ fun HomeScreen(
                 contentColor = Color.Black,
                 containerColor = Color.Yellow,
                 onClick = {
-                    navController?.navigate(NavigationItem.Details.route) {
-                        launchSingleTop = true
-                        restoreState = true
-                    }
+
+                    onClickAdd(NavigationItem.Details.route)
                 }
             ) {
                 Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
@@ -206,9 +205,14 @@ fun HomeScreenPreview() {
         NetworkModule.provideApiService(NetworkModule.provideRetrofit())
     )
 
-//    val fakeViewModel = MainViewmodel(shoppingRepository)
-//
-//    Scaffold {
-//        HomeScreen(navController = null, viewmodel = fakeViewModel, modifier = Modifier.padding(it))
-//    }
+    val fakeViewModel = MainViewmodel(shoppingRepository)
+
+    Scaffold {
+        HomeScreen(
+            navController = null,
+            viewmodel = fakeViewModel,
+            modifier = Modifier.padding(it),
+            onClickAdd = {}
+        )
+    }
 }

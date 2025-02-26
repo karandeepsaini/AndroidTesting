@@ -32,7 +32,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewmodel @Inject constructor(
     private val repo: ShoppingRepository,
-    private val dispatcher: CoroutineDispatcher,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
 ) : ViewModel() {
 
     private val _shoppingItem = MutableStateFlow(
@@ -117,29 +117,16 @@ class MainViewmodel @Inject constructor(
     }
 
     fun AddItem(shoppingItem: ShoppingItem) {
-        if (shoppingItem.image.isBlank()) {
+        if (shoppingItem.image.isBlank() ||
+            shoppingItem.name.isBlank() ||
+            shoppingItem.amount <= 0 ||
+            shoppingItem.pricePerItem <= 0 ||
+            shoppingItem.name.length > 20 ||
+            shoppingItem.pricePerItem > 10000
+            ) {
             return
         }
 
-        if (shoppingItem.name.isBlank()) {
-            return
-        }
-
-        if (shoppingItem.amount <= 0) {
-            return
-        }
-
-        if (shoppingItem.pricePerItem <= 0) {
-            return
-        }
-
-        if(shoppingItem.name.length > 20){
-            return
-        }
-
-        if(shoppingItem.pricePerItem > 10000){
-            return
-        }
         viewModelScope.launch {
             withContext(dispatcher) {
                 repo.insertShoppingItem(shoppingItem)
