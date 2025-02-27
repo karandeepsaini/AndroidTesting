@@ -29,6 +29,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.shoppinglisttesting.data.ImageItem
 import com.example.shoppinglisttesting.ui.viewmodels.MainViewmodel
 import com.google.gson.Gson
 import timber.log.Timber
@@ -41,7 +42,7 @@ fun ImageSelectionScreen(
 ) {
     val value by mainViewmodel.searchQuery.collectAsStateWithLifecycle();
     val images by mainViewmodel.imageList.collectAsStateWithLifecycle()
-    Timber.d("IMAGESS : %s",Gson().toJson(images))
+    Timber.d("IMAGESS : %s", Gson().toJson(images))
     Column(
         modifier = modifier.semantics { contentDescription = "AddImage Screen" }
     ) {
@@ -60,31 +61,42 @@ fun ImageSelectionScreen(
 
 
 
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(4),
-            modifier = Modifier.padding(vertical = 20.dp),
-            contentPadding = PaddingValues(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            items(images) {
-
-                AsyncImage(
-                    model = it.previewUrl,
-                    contentDescription = "",
-                    modifier = Modifier
-                        .size(70.dp)
-                        .clip(RoundedCornerShape(10.dp))
-                        .clickable {
-                            mainViewmodel.setImage(it.previewUrl)
-                            navController.popBackStack()
-                        }
-                )
-            }
-
-        }
+        ImageItemCompose(images, mainViewmodel, navController)
     }
 
+}
+
+
+@Composable
+fun ImageItemCompose(
+    images: List<ImageItem>,
+    mainViewmodel: MainViewmodel,
+    navController: NavHostController,
+) {
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(4),
+        modifier = Modifier.padding(vertical = 20.dp),
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(images) {
+
+            AsyncImage(
+                model = it.previewUrl,
+                contentDescription = "",
+                modifier = Modifier
+                    .size(70.dp)
+                    .clip(RoundedCornerShape(10.dp))
+                    .semantics { contentDescription="${it.id}" }
+                    .clickable {
+                        mainViewmodel.setImage(it.previewUrl)
+                        navController.popBackStack()
+                    }
+            )
+        }
+
+    }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")

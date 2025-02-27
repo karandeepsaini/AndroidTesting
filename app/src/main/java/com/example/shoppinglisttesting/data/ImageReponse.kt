@@ -12,7 +12,7 @@ data class ImageItem(
     val id: Int? = null,
     @SerializedName("pageURL") val pageUrl: String? = null,
     val type: String? = null,
-    val tags: String? = null,
+    val tags: List<ImageItem>? = null,
     @SerializedName("previewURL") val previewUrl: String,
     val previewWidth: Int? = null,
     val previewHeight: Int? = null,

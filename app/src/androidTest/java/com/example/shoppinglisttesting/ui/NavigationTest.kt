@@ -114,7 +114,7 @@ class NavigationTest {
 
         composeTestRule
             .onNodeWithContentDescription("Shopping Item Image")
-            .performClick()
+            .assertIsDisplayed()
     }
 
 

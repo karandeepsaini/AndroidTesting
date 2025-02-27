@@ -11,13 +11,13 @@
       <entry key="app">
         <State />
       </entry>
-      <entry key="navhost_check_navigation_for_add_image_screen()">
-        <State />
-      </entry>
       <entry key="navhost_check_navigation_for_add_image_screen_and_back_to_addItem()">
         <State />
       </entry>
       <entry key="navhost_clickAddNavigateToAddItemScreen()">
+        <State />
+      </entry>
+      <entry key="onSelectingImageScreenPopStack()">
         <State />
       </entry>
     </value>

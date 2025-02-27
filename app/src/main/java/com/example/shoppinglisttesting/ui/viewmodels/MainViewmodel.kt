@@ -13,6 +13,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -51,6 +52,8 @@ class MainViewmodel @Inject constructor(
         SharingStarted.Lazily,
         emptyList()
     )
+
+
 
 
     private val _totalSum = repo.getTotalSum().stateIn(
@@ -95,11 +98,12 @@ class MainViewmodel @Inject constructor(
                     when (resource.status) {
                         Status.LOADING -> {
                             Timber.d("Loading images...")
-                            _imageList.value = emptyList()
+                            setImageList(emptyList())
                         }
 
                         Status.SUCCESS -> {
-                            _imageList.value = resource.data?.hits ?: emptyList()
+                            val items = resource.data?.hits ?: emptyList()
+                            setImageList(items)
                             Timber.d("Images loaded successfully!")
                         }
 
@@ -109,6 +113,10 @@ class MainViewmodel @Inject constructor(
                     }
                 }
         }
+    }
+
+    fun setImageList(items: List<ImageItem>) {
+        _imageList.value = items
     }
 
 
